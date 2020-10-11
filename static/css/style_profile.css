@@ -1,0 +1,630 @@
+body
+{
+    font-family: Arial, Helvetica, sans-serif;
+    background-color:#fffeeb;
+
+}
+
+
+.randomQuiz
+{
+    
+
+    background-color: white;
+    padding: 0;
+    text-align: center;
+    
+}
+
+.randomQuiz img
+{
+    height: 120px;
+    vertical-align: middle;
+}
+
+.sort
+{
+    background-color: #606061;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: right;
+    text-align: right;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-bottom: 10px;;
+    
+   
+}
+
+.home_button
+{
+    margin-left: 5%;
+    width: 50px;
+    cursor: pointer;
+    text-align: center;
+    color: #e0d500;
+}
+
+.home_button:hover
+{
+    color: black;
+    background-color: #e0d500;
+}
+
+.sort li
+{
+    width: 100%;
+    
+    margin-right: 4%;
+}
+
+.hidden-sort
+{
+ position: absolute;   
+display: none;
+border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;
+z-index: 2;
+width: 100%;
+padding-top: 10px;
+padding-bottom: 10px;
+font-weight: initial;
+border: 1px solid #bdbdbd;
+border-top: none;
+background-color:#d9d9d7;
+font-size: 14px;
+}
+
+.sortopt:hover .hidden-sort
+{
+  
+    display: block;
+}
+
+
+.sortopt
+{
+    position: relative;
+    text-align: center;
+    width: 30%;
+    margin: auto;
+    
+    font-size: 15px;
+    font-weight: bold;
+}
+.sortopt-container
+{
+    background-color:#d9d9d7;
+    width: 96%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 5px;
+    margin: auto;
+    margin-bottom: 10px;
+
+    border: 1px solid #bdbdbd;
+}
+
+.logbutton-container button
+{
+    
+    width: 150px;
+    height: 30px;
+    border-radius: 5px;
+
+    
+    margin-left: 5px;
+
+}
+
+.login-button
+{
+    background-color:  #ffb5ea;
+    border: 3px solid #e290cb;
+}
+
+
+        
+.header
+{
+    background-color:#f6ed00;
+    overflow: hidden;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    padding:0;
+    height: 100px;
+    
+}
+
+.logo
+{
+    height: 100px;
+
+    
+}
+
+.totalvote
+{
+    display: flex;
+    margin-left: 5px;
+    margin-right: 5px;
+    font-size: 25px;
+    font-weight: bolder;
+    color: #008080;
+    background-color:#e1e3e6;
+    width: 60px;
+    height: 60px;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid white;
+    border-radius: 100%;
+}
+
+.upvote button, .downvote button{
+    width: 50px;
+}
+.upvote button
+{
+border-top-left-radius: 100%;
+border-top-right-radius: 100%;
+}
+.upvote img
+{
+    width: 50px;
+}
+
+.downvote img
+{
+    width: 50px;
+}
+
+.voteContainer
+{
+    margin: auto;
+   
+}
+.vote
+{
+
+    margin:0;
+    padding: 0;;
+}
+
+.vote li
+{
+    margin:0;
+    padding:0;
+
+}
+
+.subject
+{
+    display: flex;
+    height: 100%;
+    width: 30em;
+    background-color: #f6ed00;;
+    border: 10px solid #e290cb;
+    border-radius: 10px;
+   
+    
+}
+.quiz-header
+{
+    font-size: 15px;
+    color: white;
+    max-width: 100%;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 10px;
+    font-weight: bold;
+    background-color: #414142;
+}
+
+.quiz-header div
+{
+display: flex;
+justify-content: center;
+align-items: center;
+background-color: #414142;
+
+}
+
+.quiz-header div button
+{
+    background-color:  #ffb5ea;
+    border: 5px solid #e290cb;
+    border-radius: 5px;
+    width: 150px;
+    height: 50px;
+}
+
+.subject-title span
+{
+    font-size: 15px;
+    font-weight: bolder;
+}
+
+.quiz-answer
+{
+    border: 1px solid blue;
+    height: 20%;
+    margin-top: 6%;
+    text-align: center;
+}
+.quiz-question
+{
+    height: 40%;
+    width: 100%;
+    border-bottom: 5px dashed black;
+    color: black;
+    display: flex;
+    background-color: #f6ed00;
+
+    justify-content: center;
+    align-items: center;
+    font-size:18px;
+    flex-wrap: wrap;
+    
+}
+
+
+ul
+{
+    list-style-type:none;
+    margin:0;
+    padding:0;
+    display: flex;
+    flex-direction: column;
+}
+
+.innerContainer
+{
+    border: 1px solid #bdbdbd;
+    border-radius: 5px;
+    margin: 0.5em;
+    margin-bottom: 0.1em;
+    width: 100%;
+    
+    
+}
+
+ .outter
+{
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+.inner
+{
+flex-direction: column;
+flex-wrap: wrap;
+width: 100%;
+min-height: 20em;
+align-items: left;
+background-color: #434343;
+border-radius: 5px;
+
+
+
+}
+
+.inner:hover .outter
+{
+    background-color: green;
+}
+
+
+.left, .right
+{
+   width: 26%;
+   background-color:#fffcc7;
+}
+
+.randomQuizContainer
+{
+    margin-bottom: 0.5em;
+}
+.middle
+{
+    width: 40%;
+    margin-right: 1px;
+    margin-left: 1px;
+   
+}
+
+
+.topplayer 
+{
+text-align: center;
+}
+.topplayer li
+{
+ 
+ font-family: sans-serif;
+
+ color: white;
+
+}
+
+
+
+.ppheadl
+{
+    background-color:#414142;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.subl
+{
+    margin-bottom: 10px;
+}
+
+.topplayer-headline div
+{
+    
+    background-color: #f6ed00;
+    border: 1px solid #e0d500;
+    border-bottom: none;
+    font-family: sans-serif;
+    color:#414142;
+    font-weight: bold;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    font-size: 18px;;
+}
+
+.top-headline
+{
+    font-family: 'Courier New', Courier, monospace;
+    color: white;
+    background-color: #414142;
+    font-size: 28px;
+    font-weight: 100;
+    height: 40px;
+    border: 1px solid #bdbdbd;
+    border-radius: 5px;
+}
+
+.mosthon img
+{
+    width: 325px;
+}
+
+.categories
+{
+    background-color: #414142;
+    font-size: 18px;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    padding-left: 2%;
+    border: 1px solid #bdbdbd;
+    border-bottom: none;
+    border-radius: 5px;
+    color: white;
+    
+}
+
+.categoriesItems
+{
+    
+    padding-top: 7%;
+    padding-bottom: 7%;
+    background-color: #414142;
+    font-size: 14px;
+    color: white;
+    border: 1px solid #bdbdbd;
+    border-radius: 5px;
+}
+
+.categoriesItems li
+{
+    border-bottom: 1px solid #535354;
+    padding-left: 10px;
+    padding-top:5px;
+    padding-bottom:5px;
+
+}
+
+
+
+
+.scores
+{
+display: flex;
+
+flex-direction: row;
+justify-content: space-around;
+flex-wrap: wrap;
+margin: 5%;
+font-weight: bold;
+text-shadow: #606061;
+color: white;
+margin-top: 6%;
+text-align: center;
+
+}
+
+.scores-headline
+{
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #bdbdbd;
+    color: #bdbdbd;
+    margin-bottom: 10px;
+
+}
+
+.scores-stat
+{
+    font-size: 20px;
+    
+}
+
+
+
+.profile-pic
+{
+    width: 7em;
+    height: 7em;
+    border: 6px solid #535354;
+    border-radius: 5px;
+    margin: 5%;
+    margin-top: 0;
+    cursor: pointer;
+    filter: drop-shadow(0px 0px 3px black);
+}
+
+.profile-pic:hover
+{
+    opacity: 0.5
+}
+
+.profile-username
+{
+    
+    color: white;
+
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background-color: #434343;
+    margin-bottom: 5%;
+    font-size: 35px;
+    font-weight: bold;
+    border-bottom: 2px solid gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+}
+
+.inner li
+{
+    display: flex;
+    flex-direction: column; 
+   
+}
+
+.current-challenge-headline
+{
+
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    color: white;
+    border: 1px solid #bdbdbd;
+    background-color: #434343;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    text-align: center;
+
+}
+
+.see_all
+{
+    cursor: pointer;
+
+}
+.see_all:hover
+{
+    color: #e0d500;
+}
+
+.current-challenge
+{
+    background-color: #f6ed00;
+    border: 1px solid #e0d500;
+    text-align: center;
+
+    border-radius: 2px;
+    margin: auto;
+    margin-bottom: 5px;
+    width: 70%;
+    cursor: pointer;
+}
+.current-challenge:hover
+{
+    background-color: #6c6c6d;
+}
+
+.challenge-challenger
+{
+    font-size: 10px;
+    font-weight: bold;
+    
+}
+
+.challenge-title
+{
+background-color: #e0d500;
+padding:10px;
+
+}
+
+.challenge-date, .challenge-winner, .challenge-loser
+{
+    font-size: 10px;
+    text-align: center;
+}
+
+.challenge-winner
+{
+    background-color: #008080;
+    font-weight: bold;
+    padding-top: 5px;
+}
+
+.challenge-loser
+{
+    background-color: #e24242;
+    font-weight: bold;
+    padding-top: 5px;
+}
+
+
+.profile-center-container
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+}
+
+
+.profile-info-container
+{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+
+}
+
+.profile-info-container div
+{
+    margin-bottom: 5px;
+    color: #bdbdbd;
+
+}
+.prf 
+{
+ display: flex;
+ flex-direction: column;
+
+}
+.profile-info-container div:first-child
+{
+
+    margin-top: 15%;
+}
+
+.profile-highlight
+{
+    font-weight: bold;
+}
+    
+
