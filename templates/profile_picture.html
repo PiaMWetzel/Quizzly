@@ -1,0 +1,117 @@
+
+{% extends "base.html" %}
+<html>
+    <head>
+        <div class = "header"> 
+            <ul>
+                <li>
+                <img class = "logo" src = {{url_for('static', filename="images/logo2.png")}}/>
+                </li>
+                
+            </ul>
+            
+            
+        </div>
+        {%block head%}
+        <link rel = "stylesheet" href = {{url_for('static', filename="css/style_profile_picture.css")}}/>
+        {%endblock%}
+    </head>
+    <body>
+
+     <ul class = sort>
+        
+        {%block sort%}<li><div class = "home_button" onclick="go_to('/')">Home</div></li>{%endblock%}
+     </ul>
+  
+<ul class = "outter">
+    <li class = "left">
+        <ul>
+        </ul>
+
+
+    </li>
+    <li class = "middle">
+        {%block middle%}
+        <ul class = "quizcontainer">
+           
+            <li class = "innerContainer">
+               
+                <div class = "form-container">
+                <span class = "upload-headline">Upload your picture here: </span>
+                <div class = "profile_picture" ><span id = "preview-txt">Image preview</span><img id = "pic" src = "" /></div>
+                <div class = "inp-container"><input id = "q1" type="file" accept="image/*" onchange="upload_image(this)"/></div>
+                <button class = "profile_picture_submit" onclick="save_picture()">Submit</button>
+             </div>
+             </li>
+            
+        </ul>
+        {%endblock%}
+    </li>
+
+    <li class = "right">
+        <ul>
+        
+        </ul>
+    </li>
+</ul>
+
+
+       
+    </body>
+        
+        {% block javascript %}
+        <script>
+         
+   
+        function upload_image(upload)
+        {
+            uploaded_image = upload.files[0];
+            reader = new FileReader();
+            
+            if(uploaded_image)
+            {
+                //window.alert("true- uploaded image");
+                reader.readAsDataURL(uploaded_image);
+                document.getElementById("pic").style.width = "150px";
+                document.getElementById("pic").style.height = "150px";
+                document.getElementById("preview-txt").innerHTML = "";
+
+            }
+            else
+            {
+               // window.alert("false - uploaded image");
+                document.getElementById("pic").src = "";
+            }
+
+            reader.onloadend = function () {
+               // window.alert("loaded");
+            document.getElementById("pic").src = reader.result;
+            }
+
+
+
+            
+        }
+
+        function save_picture()
+        {
+            //window.alert("submitting");
+            form_data = new FormData();
+            form_data.append('image',uploaded_image);
+            //window.alert("submitti333");
+            $.ajax({
+                            
+                            url: "http://localhost:5000/upload_profile_picture",
+                            type: "POST",
+                            data: form_data,
+                            contentType: false,
+                            cache: false,
+                            processData: false,
+                            success:function(response){show_message("Image successfully uploaded");}
+                           
+                        });
+        }
+        </script>
+        {% endblock %}
+
+</html>

@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+<html>
+    <head>
+        <div class = "header"> 
+            <ul>
+                <li>
+                <img class = "logo" src = {{url_for('static', filename="images/logo2.png")}}/>
+                </li>
+                
+            </ul>
+            
+            
+        </div>
+        {%block head%}
+        <link rel = "stylesheet" href = {{url_for('static', filename="css/style_create_quiz.css")}}/>
+        {%endblock%}
+    </head>
+    <body>
+
+     <ul class = sort>
+        {%block sort%}<li><div class = "home_button" onclick="go_to('/')">Home</div></li>{%endblock%}
+     </ul>
+  
+<ul class = "outter">
+    <li class = "left">
+       
+
+    </li>
+    <li class = "middle">
+        {% block middle %}
+        <ul class = "quizcontainer">
+           
+            <li class = "innerContainer">
+                <div class = "slide-container">
+                <!-- <input id = "range-inp-id" type="range" min="1" max="10" oninput=""/> -->
+                    <!-- <output id = "range-val-id" name="range-val-name"></output> -->
+                </div>
+               
+                <div class = "new-quiz-container">
+                    <div id = "quiz_title_headline">Quiz Title:</div>
+                    <input oninput="clear_border(this, '#e0d500' )" id = "quiz_title" type="text" placeholder="Enter the title of your quiz"/>
+                </div>
+              <div class = "question-container">
+                <div class = "question-headline">Question 1</div>
+                <input oninput="clear_border(this, '#e0d500' )" type = "text" class = "inp-question" placeholder="Enter question"/>
+                <div class = "radio-button-container">
+                    <div class = "rb-inner"><div><input onclick="clear_radio_border(this)" class = "inp-radio" id = "radio_a" type = "radio" name="answer1"/><input oninput="clear_border(this, '#e0d500' )"  class = "radio_txt" type = "text" name="answer"/></div>
+                    <div><input class = "inp-radio" onclick="clear_radio_border(this)" id = "radio_b" type = "radio" name="answer1"/><input oninput="clear_border(this, '#e0d500' )" class = "radio_txt" type = "text" name="answer"/></div></div>
+                    
+                    <div class = "rb-inner"><div><input class = "inp-radio"  onclick="clear_radio_border(this)" id = "radio_c" type = "radio" name="answer1"/><input oninput="clear_border(this, '#e0d500' )" class = "radio_txt" type = "text" name="answer"/></div>
+                    <div><input class = "inp-radio" onclick="clear_radio_border(this)"  id = "radio_d" type = "radio" name="answer1"/><input oninput="clear_border(this, '#e0d500' )" class = "radio_txt" type = "text" name="answer"/></div></div>
+                </div>
+              </div>
+
+              <div class = "question-container">
+                <div class = "question-headline">Question 2</div>
+                <input oninput="clear_border(this, '#e0d500' )" type = "text" class = "inp-question" placeholder="Enter question"/>
+                <div class = "radio-button-container">
+                    <div class = "rb-inner"><div><input class = "inp-radio" onclick="clear_radio_border(this)" id = "radio_a" type = "radio" name="answer2"/><input oninput="clear_border(this, '#e0d500' )" class = "radio_txt" type = "text" name="answer"/></div>
+                    <div><input class = "inp-radio" onclick="clear_radio_border(this)" id = "radio_b" type = "radio" name="answer2"/><input oninput="clear_border(this, '#e0d500' )" class = "radio_txt" type = "text" name="answer"/></div></div>
+                    
+                    <div class = "rb-inner"><div><input class = "inp-radio" onclick="clear_radio_border(this)" id = "radio_c" type = "radio" name="answer2"/><input oninput="clear_border(this, '#e0d500' )" class = "radio_txt" type = "text" name="answer"/></div>
+                    <div><input class = "inp-radio" onclick="clear_radio_border(this)" id = "radio_d" type = "radio" name="answer2"/><input oninput="clear_border(this, '#e0d500' )" class = "radio_txt" type = "text" name="answer"/></div></div>
+                </div>
+              </div>
+
+              <div class = "question-container">
+                <div class = "question-headline">Question 3</div>
+                <input oninput="clear_border(this, '#e0d500' )" type = "text" class = "inp-question" placeholder="Enter question"/>
+                <div class = "radio-button-container">
+                    <div class = "rb-inner"><div><input class = "inp-radio" onclick="clear_radio_border(this)" id = "radio_a" type = "radio" name="answer3"/><input oninput="clear_border(this, '#e0d500' )"  class = "radio_txt" type = "text" name="answer"/></div>
+                    <div><input class = "inp-radio" onclick="clear_radio_border(this)" id = "radio_b" type = "radio" name="answer3"/><input oninput="clear_border(this, '#e0d500' )" class = "radio_txt" type = "text" name="answer"/></div></div>
+                    
+                    <div class = "rb-inner"><div><input class = "inp-radio" onclick="clear_radio_border(this)" id = "radio_c" type = "radio" name="answer3"/><input oninput="clear_border(this, '#e0d500' )" class = "radio_txt" type = "text" name="answer"/></div>
+                    <div><input class = "inp-radio" onclick="clear_radio_border(this)" id = "radio_d" type = "radio" name="answer3"/><input oninput="clear_border(this, '#e0d500' )" class = "radio_txt" type = "text" name="answer"/></div></div>
+                </div>
+              </div>
+
+              <div class = "question-container">
+                <div class = "question-headline">Question 4</div>
+                <input oninput="clear_border(this, '#e0d500' )" type = "text" class = "inp-question" placeholder="Enter question"/>
+                <div class = "radio-button-container">
+                    <div class = "rb-inner"><div><input  class = "inp-radio" onclick="clear_radio_border(this)" id = "radio_a" type = "radio" name="answer4"/><input oninput="clear_border(this, '#e0d500' )"  class = "radio_txt" type = "text" name="answer"/></div>
+                    <div><input class = "inp-radio" onclick="clear_radio_border(this)" id = "radio_b" type = "radio" name="answer4"/><input oninput="clear_border(this, '#e0d500' )" class = "radio_txt" type = "text" name="answer"/></div></div>
+                    
+                    <div class = "rb-inner"><div><input class = "inp-radio" onclick="clear_radio_border(this)" id = "radio_c" type = "radio" name="answer4"/><input  oninput="clear_border(this, '#e0d500' )" class = "radio_txt" type = "text" name="answer"/></div>
+                    <div><input class = "inp-radio" onclick="clear_radio_border(this)" id = "radio_d" type = "radio" name="answer4"/><input oninput="clear_border(this, '#e0d500' )" class = "radio_txt" type = "text" name="answer"/></div></div>
+                </div>
+              </div>
+
+              <div class = "question-container">
+                <div class = "question-headline">Question 5</div>
+                <input oninput="clear_border(this, '#e0d500' )" type = "text" class = "inp-question" placeholder="Enter question"/>
+                <div class = "radio-button-container">
+                    <div class = "rb-inner"><div><input class = "inp-radio" onclick="clear_radio_border(this)" id = "radio_a" type = "radio" name="answer5"/><input oninput="clear_border(this, '#e0d500' )" class = "radio_txt" type = "text" name="answer"/></div>
+                    <div><input class = "inp-radio" onclick="clear_radio_border(this)"  id = "radio_b" type = "radio" name="answer5"/><input oninput="clear_border(this, '#e0d500' )" class = "radio_txt" type = "text" name="answer"/></div></div>
+                    
+                    <div class = "rb-inner"><div><input class = "inp-radio" onclick="clear_radio_border(this)" id = "radio_c" type = "radio" name="answer5"/><input oninput="clear_border(this, '#e0d500' )" class = "radio_txt" type = "text" name="answer"/></div>
+                    <div><input class = "inp-radio" onclick="clear_radio_border(this)"  id = "radio_d" type = "radio" name="answer5"/><input oninput="clear_border(this, '#e0d500' )" class = "radio_txt" type = "text" name="answer"/></div></div>
+                </div>
+              </div>
+
+            <div class="quiz-description">
+                <div>Quiz Description:</div>
+              <input id = "quiz_desc" type = "text" placeholder="Enter a quiz description"/>  
+            </div>
+            <div class="quiz-category">
+                <div>Quiz category:</div>
+                <input id = "quiz_cat" type = "text" placeholder="Enter a quiz category"/>  
+            </div>
+
+            <button id = "submit-user_quiz" onclick="submit_quiz()">Submit</button>
+             </li>
+            
+        </ul>
+        {%endblock%}
+    </li>
+
+    <li class = "right">
+        <ul>
+
+        </ul>
+    </li>
+</ul>
+
+
+       
+    </body>
+        
+        {% block javascript %}
+        <script>
+            document.getElementById("user-options").style.display = "block";
+
+            var category = "Animals";
+            var quiz_title = "";
+            var message = "";
+
+            
+
+            function to_array(some_obj)
+            {
+                arr = [];
+
+                for(var i = 0; i < some_obj.length; i++)
+                {
+                    arr[i] = some_obj[i].value;
+                }
+                return arr;
+            }
+
+            function check_if_filled_out_single(some_element)
+            {
+                var filled = true;
+                if(some_element.value == "")
+                {
+                    some_element.style.borderColor = "red";
+                    message = "You forgot to fill some things out";
+                    filled = false;
+                }
+
+                return filled;
+            }
+
+            function check_if_filled_out(some_array)
+            {
+                
+                var filled = true;
+                for(var i=0; i < some_array.length; i++)
+                {
+                    if(some_array[i].value == "")
+                    {
+                        some_array[i].style.borderColor = "red";
+                        message = "You forgot to fill some things out";
+                        filled = false;
+                    }
+                }
+
+                return filled;
+            }
+
+            function check_if_radio_buttons_selected(radio_buttons)
+            {
+                var filled = true;
+
+                for(var i = 0; i < radio_buttons.length; i++)
+                {
+                    var temp = document.getElementsByName(radio_buttons[i].name);
+                    for(var t = 0; t < temp.length; t++)
+                    if(temp[0].checked == false && temp[1].checked == false && temp[2].checked == false && temp[3].checked == false)
+                    {
+                        //temp[0].parentNode.parentNode.parentNode.style.backgroundColor = "red";
+                        temp[0].parentNode.parentNode.parentNode.style.border = "3px solid red";
+                        message = "You forgot to fill some things out";
+                        filled = false;
+                    }
+                }
+
+                return filled;
+            }
+            
+            function submit_quiz()
+            {
+                
+                questions = document.getElementsByClassName("inp-question");
+                var filled_questions = check_if_filled_out(questions);
+                answers = document.getElementsByClassName("radio_txt");
+                var filled_answers = check_if_filled_out(answers);
+                description = document.getElementById("quiz_desc");
+                quiz_description = description.value;
+                var filled_description = check_if_filled_out_single(description);
+                category = document.getElementById("quiz_cat");
+                quiz_category = category.value;
+                var filled_category = check_if_filled_out_single(category);
+                title = document.getElementById("quiz_title");
+                quiz_title = title.value;
+                var filled_title = check_if_filled_out_single(title);
+                answer_correctness = [];
+                selected_radio_btn = document.getElementsByClassName("inp-radio");
+                var filled_radio = check_if_radio_buttons_selected(selected_radio_btn);
+
+                //display message 
+
+                if(message != "")
+                {
+                    window.scroll({
+                        top:100,
+                        left:100,
+                        behavior: "smooth" 
+                    });
+                    show_message(message);
+                }
+
+                for(var i = 0; i < selected_radio_btn.length; i++)
+                {
+                    if(selected_radio_btn[i].checked == true)
+                    {
+                        answer_correctness[i] = true;
+                    }
+                    else
+                    {
+                        answer_correctness[i] = false;
+                    }
+                }
+                answers = to_array(answers);
+                questions = to_array(questions);
+
+            if(filled_title && filled_description && filled_category && 
+                filled_questions && filled_answers && filled_radio)
+            {
+                $.ajax({
+                            
+                            url: "http://localhost:5000/save_user_quiz",
+                            type: "POST",
+                            contentType: "application/JSON",
+                            data: JSON.stringify({"questions":questions, "answers":answers, 
+                            "answer_correctness":answer_correctness,"category":quiz_category, 
+                            "title":quiz_title, "description":quiz_description}),
+                            success:function(response){ }
+                           
+                        });
+                }
+            }
+                
+
+        function clear_border(item, a_color)
+        {
+            color = "red";
+            if(item.value != "")
+            {
+                color= a_color;
+            }
+            item.style.borderColor = color;
+            
+        }
+
+        function clear_radio_border(item)
+        {
+            item.parentNode.parentNode.parentNode.style.border = "none";
+        }
+
+        function go_to(a_link)
+            {
+                window.location.href = a_link;
+            }
+        
+        </script>
+        {% endblock %}
+
+</html>

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+<html>
+    <head>
+        <div class = "header"> 
+            <ul>
+                <li>
+                <img class = "logo" src = {{url_for('static', filename="images/logo2.png")}}/>
+                </li>
+                
+            </ul>
+            
+            
+        </div>
+        {%block head%}
+        {{ moment.include_jquery() }}
+        {{ moment.include_moment() }}
+        <link rel = "stylesheet" href = {{url_for('static', filename="css/style_profile.css")}}/>
+        <link rel = "stylesheet" href = {{url_for('static', filename="css/see_all.css")}}/>
+        {%endblock%}
+    </head>
+    <body>
+        <div class = "custom-message" id = "custom-message">
+            <div class="message-headline" id = "message-headline">This is a custom message</div>
+            <div class="message-center" id = "message-center">You have been successfully logged out</div>
+        <div class="message-footer"><button onclick="hide_message(this.parentNode.parentNode)">Ok</button></div>
+        </div>
+
+     <ul class = sort>
+        {% block sort %}
+        <li><div class = "home_button" onclick="go_to('/')">Home</div></li>
+        {% endblock %}
+     </ul>
+  
+<ul class = "outter">
+    <li class = "left">
+    </li>
+            
+        </ul>
+
+
+    </li>
+    <li class = "middle">
+        {% block middle %}
+        <ul class = "quizcontainer">
+           
+            
+            <li>
+                <div class = "current-challenge-headline">Complete Challenge History:</div>
+                
+                    {% for challenge in challenges %}
+                    <div class = "current-challenge"> 
+                        {% if user_id != challenge.opponent %}
+                        {% if challenge.opponent_score > challenge.challenger_score %}
+                            <div class = "challenge-loser">You lost!</div>
+                        {% else %}
+                            <div class = "challenge-winner">You won! {{challenge.challenge }}</div>
+                        {% endif %}
+                        <div class = "challenge-title">{{challenge.title}}</div>
+                        
+                        <div class = "challenge-challenger"> {{challenge.username}} challenged you</div>
+                        {% else %}
+                        {% if challenge.opponent_score < challenge.challenger_score %}
+                            <div class = "challenge-loser">You lost!</div>
+                        {% else %}
+                            <div class = "challenge-winner">You won! {{challenge.challenge }}</div>
+                        {% endif %}
+                        <div class = "challenge-title">{{challenge.title}}</div>
+                        
+                        <div class = "challenge-challenger">You challenged {{challenge.username}}</div>
+                        {% endif %}  
+                        <div class = "challenge-date">{{ moment(times[loop.index0]).format("MMM Do YYYY") }}</div>
+                    </div>
+                    {% endfor %}
+            </li>
+
+             
+            
+        </ul>
+        {% endblock %}
+    </li>
+
+    <li class = "right">
+    </li>
+       
+    </body>
+        
+        {% block javascript %}
+        <script>
+            document.getElementById("user-options").style.display = "block";
+    
+        </script>
+        {% endblock %}
+
+</html>

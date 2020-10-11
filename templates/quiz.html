@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+<html>
+    <head>
+        {% block head %}
+        <link rel = "stylesheet" href = {{url_for('static', filename="css/style_quiz.css")}}/>
+        {% endblock %}
+        <div class = "header"> 
+            <ul>
+                <li>
+                <img class = "logo" src = {{url_for('static', filename="images/logo2.png")}}/>
+                </li>
+                
+            </ul>
+            
+            
+        </div>
+        
+    </head>
+    <body>
+
+     <ul class = sort>
+        {% block sort %}
+        <div class = "home_button" onclick="go_to('/')">Home</div>
+        {% endblock %}
+    
+     </ul>
+  
+<ul class = "outter">
+    <li class = "left">
+        <ul>
+            <li>
+               
+            </li>
+        </ul>
+
+
+    </li>
+    <li class = "middle">
+        {% block middle %}
+        <ul class = "quizcontainer">
+            <li class = "innerContainer">
+                <ul class = "inner">  
+                 
+                 <li><ul class = "subject">
+                    <li class = "quiz-header">History: <span>US citizenship test</span></li>
+                    <li class = "quiz-question" id = "question">What is the Capital of the United States of America?</li>
+                    <li class = "quiz-answer">
+                       
+                        <input name = "quizAnswer" type = radio id = "A" onclick="recordAnswer(this.id)"/> <label for "A" id = "A_label">Tallahassee</label>
+                        <input name = "quizAnswer" type = radio id = "B" onclick="recordAnswer(this.id)"/> <label for "B" id = "B_label">New York City</label> </br>
+                        <input name = "quizAnswer" type = radio id = "C" onclick="recordAnswer(this.id)"/> <label for "C" id = "C_label">Tallahassee</label>
+                        <input name = "quizAnswer" type = radio id = "D" onclick="recordAnswer(this.id)"/> <label for "D" id = "D_label">New York City</label>
+                    </li>
+                    
+                    <li class = "quiz-header"><div><button onclick = "getNext()">Submit</button></div></li>
+                </ul></li>
+                 
+                 </ul>
+             </li>
+            
+        </ul>
+        {% endblock %}
+    </li>
+
+    <li class = "right">
+
+    </li>
+</ul>
+
+
+       
+    </body>
+        
+        {% block javascript %}
+        <script>
+            var counter = 0;
+            var selectedAnswer = "";
+            var score = 0;
+            var user_answers = [];
+            var correct_answers = [];
+
+            questions = JSON.parse({{questions|tojson}});
+            challenge_id = JSON.parse({{challenge_id|tojson}});
+            quiz_id = JSON.parse({{quiz_id|tojson}});
+
+            //window.alert("quiz_id: " + quiz_id);
+
+            getNext();
+
+           function recordAnswer(btn)
+           {
+            label_id = btn+"_label";
+            selectedAnswer = document.getElementById(label_id).innerText;
+            
+           }
+
+
+           function getNext()
+            {  
+                //quiz ended 
+                if(counter > 0)
+                {
+                    if(selectedAnswer !== "")
+                    {   
+                    user_answers.push(selectedAnswer);
+                    selectedAnswer = "";
+                    }
+                    else
+                    {
+                       
+                        show_message("Please select an answer first");
+                        
+                        // var timeout = setInterval(3);
+                        // clearInterval(timeout);
+                        return; 
+                    }
+                    
+                }
+
+                if(counter >= questions.length)
+                {
+                        // window.alert(user_answers);
+                        $.ajax({
+                            
+                            url: "http://localhost:5000/results",
+                            type: "POST",
+                            contentType: "application/JSON",
+                            data: JSON.stringify({"user_answers":user_answers, "quiz_id": quiz_id, "challenge_id":challenge_id}),
+                            success:function(response){ document.write(response);}
+                           
+                        });
+                }
+                document.getElementById('question').innerText = questions[counter][0];
+                document.getElementById('A_label').innerText = questions[counter][1];
+                document.getElementById('B_label').innerText = questions[counter + 1][1];
+                document.getElementById('C_label').innerText = questions[counter + 2][1];
+                document.getElementById('D_label').innerText = questions[counter + 3][1];
+
+                //Deselect radio buttons
+                document.getElementById("A").checked = false;
+                document.getElementById("B").checked = false;
+                document.getElementById("C").checked = false;
+                document.getElementById("D").checked = false;
+
+                counter+=4;
+            }
+
+
+            function go_to(a_link)
+            {
+                window.location.href = a_link;
+            }
+    
+        </script>
+        {% endblock %}
+
+</html>

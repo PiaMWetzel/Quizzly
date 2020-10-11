@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+<html>
+    <head>
+        <div class = "header"> 
+            <ul>
+                <li>
+                <img class = "logo" src = {{url_for('static', filename="images/logo2.png")}}/>
+                </li>
+                
+            </ul>
+            
+            
+        </div>
+        {%block head%}
+        {{ moment.include_jquery() }}
+        {{ moment.include_moment() }}
+        <link rel = "stylesheet" href = {{url_for('static', filename="css/style_profile.css")}}/>
+        {%endblock%}
+    </head>
+    <body>
+        <div class = "custom-message" id = "custom-message">
+            <div class="message-headline" id = "message-headline">This is a custom message</div>
+            <div class="message-center" id = "message-center">You have been successfully logged out</div>
+        <div class="message-footer"><button onclick="hide_message(this.parentNode.parentNode)">Ok</button></div>
+        </div>
+
+ 
+        {% block sort %}
+        <li><div class = "home_button" onclick="go_to('/')">Home</div></li>
+        {% endblock %}
+
+  
+
+        {% block left %}
+        <ul>
+           
+            <li>
+            <div class = "current-challenge-headline">Challenges for you:</div>
+            {% for open_challenge in open_challenges %}
+            <div class = "current-challenge" id = "{{open_challenge.challenge_id}}_{{open_challenge.quiz_id}}" onclick = "startChallenge(this.id)"> 
+                <div class = "challenge-title">{{open_challenge.title}}</div>
+                <div class = "challenge-challenger">{{open_challenge.username}} challenged you</div>
+                <div class = "challenge-date">Expires {{(moment(times[loop.index0])).fromNow(refresh=True)}}</div>
+            </div>
+            {% endfor %}
+
+            </li>
+
+                <li>
+                <div class = "current-challenge-headline">Your Challenges:</div>
+                {% for open_challenge_you in open_challenges_you %}
+                <div class = "current-challenge" id = "{{open_challenge_you.challenge_id}}_{{open_challenge_you.quiz_id}}"> 
+                    <div class = "challenge-title">{{open_challenge_you.title}}</div>
+                    <div class = "challenge-challenger">You challenged {{open_challenge_you.username}}</div>
+                    <div class = "challenge-date">Expires {{(moment(times2[loop.index0])).fromNow(refresh=True)}}</div>
+                </div>
+                {% endfor %}
+    
+                </li>
+
+            <li>
+                <div class = "current-challenge-headline">Completed Challenges:</div>
+                
+                    {% for completed_challenge in completed_challenges %}
+                    <div class = "current-challenge"> 
+                        {% if user_id != completed_challenge.opponent %}
+                        {% if completed_challenge.opponent_score > completed_challenge.challenger_score %}
+                            <div class = "challenge-loser">You lost!</div>
+                        {% else %}
+                            <div class = "challenge-winner">You won! {{completed_challenge.challenge }}</div>
+                        {% endif %}
+                        <div class = "challenge-title">{{completed_challenge.title}}</div>
+                        
+                        <div class = "challenge-challenger"> {{completed_challenge.username}} challenged you</div>
+                        {% else %}
+                        {% if completed_challenge.opponent_score < completed_challenge.challenger_score %}
+                            <div class = "challenge-loser">You lost!</div>
+                        {% else %}
+                            <div class = "challenge-winner">You won! {{completed_challenge.challenge }}</div>
+                        {% endif %}
+                        <div class = "challenge-title">{{completed_challenge.title}}</div>
+                        
+                        <div class = "challenge-challenger">You challenged {{completed_challenge.username}}</div>
+                        {% endif %}  
+                    </div>
+                    {% endfor %}
+
+
+
+
+            </li>
+            <li class = "current-challenge-headline see_all" onclick="go_to('/see_all/challenges')">See all </li>
+            
+        </ul>
+    {% endblock %}
+
+
+        {% block middle %}
+        <ul class = "quizcontainer">
+           
+            <li class = "innerContainer">
+                <ul class = "inner">  
+                 
+                <li>
+                    <div class = "prf">
+                        <div class = "profile-username">Your Profile</div>
+                        <div class = "profile-center-container">
+                        <img class = "profile-pic" id = "profile-pic" onclick="change_picture()" src = {{image}}/>
+                       <div class = "profile-info-container">
+                        <div><span class = "profile-highlight">Username:</span> {{username}}</div>
+                       <div><span class = "profile-highlight">Email: </span>{{email}}</div>
+                    </div>
+                    </div>
+                    </div>
+                </li>
+                <li>
+                <div class = "scores">
+                <div>
+                    <div class = "scores-headline"> All-time Scores</div>
+                    <div><div class = "scores-stat">{{ total_count }} </div> Quizzes</div>
+                    <div><div class = "scores-stat">{{ total_score }}%</div> average</div>
+                </div>
+                <div>
+                    <div class = "scores-headline"> Daily Score</div>
+                    <div><div class = "scores-stat">{{ today_count }}</div> Quizzes</div>
+                    <div><div class = "scores-stat">{{ today_score }}%</div> average</div>
+                </div>
+                </div>
+                </li>
+                
+                
+              
+                 </ul>
+             </li>
+
+             
+            
+        </ul>
+        {% endblock %}
+
+
+
+            {%block right%}
+                <li>
+                <div class = "current-challenge-headline">Completed Quizzes:</div>
+                {% for quiz in quizzes %}
+                <div class = "current-challenge" onclick = ""> 
+                    <div class = "challenge-date">{{ moment(times3[loop.index0]).format("MMM Do YYYY") }}</div>
+                    <div class = "challenge-title">{{ quiz.title }}</div>
+                    <div class = "challenge-challenger">Your score: {{ quiz.result }}</div>
+                </div>
+                {% endfor %}
+                </li>
+                <li class = "current-challenge-headline see_all" onclick="go_to('/see_all/quiz_history')">See all </li>
+            {%endblock%}
+       
+    </body>
+        
+        {% block javascript %}
+        <script>
+
+    //times
+    //window.alert("hello");
+    var t1 = {{shortest_t|tojson}};
+    //t2 = JSON.parse({{times2|tojson}});
+    var c_id = {{c_id}};
+  
+ 
+    //if there are challenges...
+    if(t1 > -1)
+    {
+        var time_to_delete = window.setInterval(function(){delete_challenge(c_id)}, t1*1000);
+    }
+
+
+    function delete_challenge(c_id)
+    {
+       // window.alert("deleting challnge");
+        window.clearInterval(time_to_delete);
+    $.ajax({
+                url: "http://localhost:5000/delete_challenge",
+                type: "POST",
+                contentType: "application/JSON",
+                data: JSON.stringify({"challenge_id":c_id}),
+                success:function(response){ window.location.reload();}
+            });
+    }
+
+    //updating profile picture
+    d = new Date();
+    uid = {{user_id}};
+    image_path =  document.getElementById("profile-pic").src;
+    document.getElementById("profile-pic").src = "static/images/ProfilePics/"+uid+".png?" +d.getTime() ;
+
+    //dashboard visible
+    document.getElementById("user-options").style.display = "block";
+
+
+
+         
+            function startChallenge(conc_id)
+            {
+                ids = conc_id.split("_");
+                quiz_id = ids[1];
+                challenge_id = ids[0];
+
+                // window.alert("Quiz ID: " + quiz_id);
+                // window.alert("Challenge ID: " + challenge_id);
+                window.location.href = "/quiz/"+quiz_id+"/"+challenge_id;
+
+            //     $.ajax({
+            //     url: "http://localhost:5000/quiz/",
+            //     type: "POST",
+            //     contentType: "application/JSON",
+            //     data: JSON.stringify({"challenge_id":challenge_id}),
+            //     success:function(response){ document.write(response); window.alert("hohoho");}
+            // });
+            }
+
+            function change_picture()
+            {
+                window.location.href = "/picture"
+            }
+
+
+            
+    
+        </script>
+        {% endblock %}
+
+</html>

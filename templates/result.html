@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+<html>
+
+<head>
+    {% block head %}
+    <link rel="stylesheet" href={{url_for('static', filename="css/style_result.css")}} />
+    {% endblock %}
+
+    <div class="header">
+        <ul>
+            <li>
+                <img class="logo" src={{url_for('static', filename="images/logo2.png")}} />
+            </li>
+
+        </ul>
+
+
+    </div>
+
+</head>
+
+<body>
+
+    <ul class=sort>
+        {% block sort %}
+        <div class="home_button" onclick="go_to('/')">Home</div>
+        {% endblock %}
+    </ul>
+
+    <ul class="outter">
+        <li class="left">
+            <ul>
+                <li>
+
+                </li>
+            </ul>
+
+
+        </li>
+
+        {% block middle %}
+        <ul class="quizcontainer">
+            <li class="innerContainer">
+                <ul class="inner">
+                    <li>
+                        <div class="result-top">
+                            <div class="result-headline">Your Score: </div>
+                            <span class="result-highlight">{{score}}/5</span>
+                            <div class="result-quiz-title">{{quiz_title}}</div>
+                        </div>
+                    </li>
+
+                    <li class='table_container'>
+
+                        <table>
+                            {% for answer in answers%}
+                            {% if answer[1] == answer[2]%}
+                            <tr class="result-row">
+                                <td class="result-question">{{ answer[0] }}</td>
+                                <td>{{ answer[1] }}</td>
+                                <td style="color: #005e03; font-weight: bold;">{{ answer[2] }}</td>
+                            </tr>
+                            {% else %}
+                            <tr class="result-row">
+                                <td class="result-question">{{ answer[0] }}</td>
+                                <td>{{ answer[1] }}</td>
+                                <td style="color: #6e0700; font-weight: bold;">{{ answer[2] }}</td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </table>
+                    </li>
+                    <li><button class="b1" onclick="add_to_quiz_history()">End review</button></li>
+                    <li class="c1">
+                        <div class="b2">... or challenge someone here:</div>
+                    </li>
+                    <li class="c1 c5" id="a1">
+                        <div class="challenge-container"><input id="challenger_input" placeholder="Type a name..."
+                                type="text" oninput="get_challengers()" />
+                            <div id="challenger-list"></div>
+                        </div>
+                    </li>
+                    <li class="c1 c2" id="a2" class="opponent-container">
+                        <div id="a3" class="opponent-selection">
+                            <div class="opponent-remove" onclick="remove_opponent_selection()">X</div>
+                            <div class="c4"><span id="a4"></span></div>
+                        </div><button class="opponent-submit" onclick="challenge()">Challenge</button>
+                    </li>
+                    <li class="extender"></li>
+                </ul>
+            </li>
+
+        </ul>
+        {% endblock %}
+
+
+        <li class="right">
+
+        </li>
+    </ul>
+
+
+
+</body>
+
+{% block javascript %}
+<script>
+
+    var opponent_id = -1;
+    opponent_name = "";
+
+    info = JSON.parse({{ info| tojson}});
+    var quiz_id = info.quiz_id;
+    var score = info.score;
+    var challenge_id = info.challenge_id;
+
+    //dashboard visible
+    document.getElementById('user-options').style.display = 'block'
+
+    if (challenge_id > 0) {
+        temp = document.getElementsByClassName("c1");
+        for (var i = 0; i < temp.length; i++) {
+            temp[i].style.display = "none";
+        }
+    }
+
+
+
+    //Custom message
+
+
+    function get_challengers() {
+
+        user_input = document.getElementById("challenger_input").value;
+        if (user_input.length == 0) {
+            document.getElementById("challenger-list").style.display = "none";
+            return;
+        }
+
+        $.ajax({
+            url: "http://localhost:5000/get_challengers",
+            type: "POST",
+            contentType: "application/JSON",
+            data: JSON.stringify({ "user_input": user_input }),
+            success: function (response) {
+                chal = JSON.parse(response);
+                add_to_dropdown(chal);
+            }
+
+
+        });
+    }
+
+    function add_to_dropdown(challengers) {
+        document.getElementById("challenger-list").innerHTML = "";
+        if (challengers && challengers != "") {
+            document.getElementById("challenger-list").style.display = "block";
+            for (i = 0; i < challengers.length; i++) {
+
+                var div = document.createElement('div');
+                div.id = challengers[i].user_id;
+                div.innerHTML = challengers[i].username;
+                div.className = 'challenger-selection';
+                div.addEventListener('click', function () {
+                    temp = this.innerHTML;
+                    opponent_id = this.id;
+                    add_to_search_bar(this.innerHTML, this.id);
+                });
+
+                document.getElementById("challenger-list").appendChild(div);
+            }
+        }
+        else {
+            document.getElementById("challenger-list").style.display = "none";
+        }
+
+
+
+    }
+
+    function add_to_search_bar(username, user_id_opponent) {
+        opponent_name = username;
+
+        document.getElementById("challenger_input").value = "";
+        document.getElementById("challenger-list").innerHTML = "";
+        document.getElementById("challenger-list").style.display = "none";
+        document.getElementById("a4").innerHTML = username;
+        document.getElementById("a2").style.display = 'flex';
+        opponent_id = user_id_opponent;
+
+        document.getElementById("a1").style.display = 'none';
+    }
+
+    function remove_opponent_selection() {
+        document.getElementById("a2").style.display = 'none';
+
+
+        document.getElementById("a1").style.display = 'block';
+    }
+
+    function challenge() {
+
+        $.ajax({
+            url: "http://localhost:5000/challenge",
+            type: "POST",
+            contentType: "application/JSON",
+            data: JSON.stringify({ "opponent_id": opponent_id, "score": score, "quiz_id": quiz_id }),
+            success: function (response) {
+                window.scroll({ left: 100, top: 100, behavior: "smooth" });
+                show_message("You successfully challenged " + opponent_name);
+            }
+
+
+        });
+
+    }
+
+
+    function add_to_quiz_history() {
+        if (challenge_id > 0) {
+            window.location.href = "/1/All/default";
+        }
+        $.ajax({
+            url: "http://localhost:5000/add_quiz_history",
+            type: "POST",
+            contentType: "application/JSON",
+            data: JSON.stringify({ "score": score, "quiz_id": quiz_id }),
+            success: function (response) { window.location.href = "/"; }
+
+
+        });
+    }
+
+    function go_to(a_link) {
+        window.location.href = a_link;
+    }
+
+</script>
+{% endblock %}
+
+</html>

@@ -1,0 +1,342 @@
+{% extends "base.html" %}
+<html>
+    <head>
+
+        <div class = "header"> 
+            <ul>
+                <li>
+                <img class = "logo" src ={{url_for('static', filename='images/logo2.png')}}/>
+                </li>
+                
+            </ul>
+            
+            
+        </div>
+        {%block head %}<link rel = "stylesheet" href = {{url_for('static', filename='css/style.css')}}/>{%endblock%}
+
+    </head>
+
+        
+         {%block sort%}
+        <div class = "home_button" onclick="go_to('/')">Home</div>
+        <li class = "logbutton-container">
+    
+              <button class = "login-button" id = "login-button" onclick="sign_up()">Log in/Sign up</button>
+        </li>
+        {%endblock%}
+
+  
+        {% block left %}
+        <ul>
+            <li class = "randomQuizContainer"><button class = "randomQuiz" onclick="play_random_quiz()"><img src = {{url_for('static', filename = "images/Buttons/randomquiz.png")}}/></button></li>
+            <li class = "categories">Categories</li>
+            <li>
+                <ul class = "categoriesItems">
+                    <li class = "categoriesAll" onclick="sort_by_category(this.innerHTML)">All</li>
+                    <li></li>
+                    {% for category in categories %}
+                    <li class = "category" onclick="sort_by_category(this.innerHTML)">{{category}}</li>
+                    {% endfor %}
+
+                </ul>
+            </li>
+        </ul>
+        {% endblock %}
+
+        {% block middle %}
+        <ul class = "quizcontainer">
+
+            <li class = "sortopt-container">
+            <div class = "sortopt">Sort 
+                <ul class = "hidden-sort">
+                    <li></li>
+                    <li onclick="order_by('default')">All</li>
+                    <li onclick="order_by('date')">Newest</li>
+                    <li onclick="order_by('highest_score')">Highest Score</li>
+                    <li onclick="order_by('lowest_score')">Lowest Score</li>
+                        
+                </ul>
+            </div>
+        </li>
+           {% for quiz in quizzes %}
+            <li class = "innerContainer" >
+                <ul class = "inner">
+                  {% if quiz.votes >= 0 %}
+                 <li class = "totalvote" id = "{{quiz.id}}_votes">{{quiz.votes}}</li>   
+                 {%else%}
+                 <li class = "totalvote" id = "{{quiz.id}}_votes" style="color: #f6594b;">{{quiz.votes}}</li>
+                 {%endif%}
+                 
+                 <li><ul class = "subject" onclick="blub(this.id)" id= "{{quiz.id}}">
+                    <li class = "subject-title">{{quiz.category}}: <span>{{ quiz.title }}</span></li>
+                    <li class = "subject-desc">{{ quiz.description }}</li>
+                 </ul></li>
+                 <li class = "voteContainer"><ul class = "vote">
+                     {% if quiz.upvotes == 1%}
+                    <li class = "upvote"><img  class = "d1" id = "{{quiz.id}}_upv" src={{url_for('static', filename = "images/Buttons/up.png")}} onclick="upvote(this)"/></li>
+                    {% else %}
+                    <li class = "upvote"><img class = "d2" id = "{{quiz.id}}_upv" src={{url_for('static', filename = "images/Buttons/up.png")}} onclick="upvote(this)"/></li>
+                    {% endif %}
+                    {% if quiz.downvotes == 1 %}
+                    <li class = "downvote"><img class = "d1" id = "{{quiz.id}}_downv" src={{ url_for('static',filename = "images/Buttons/down.png")}}/ onclick="downvote(this)"></li>
+                    {%else%}
+                    <li class = "downvote"><img class = "d2" id = "{{quiz.id}}_downv" src={{ url_for('static',filename = "images/Buttons/down.png")}}/ onclick="downvote(this)"></li>
+                    {% endif %}
+                </ul></li>
+                 </ul>
+             </li>
+             {% endfor %}
+            
+        </ul>
+        {% endblock %}
+
+    <li class = "right">
+        <ul>
+                
+            {% block right %}
+            <ul class = "topplayer">
+                <li class = "topplayer-headline"><div>Most Quizzes</div></li>
+                <li><ul>
+                    <li class = "ppheadl">{{most_quizzes[0]}}</li>
+                    <li class ="topPlayerPP"><img  src = {{most_quizzes[1]}}/></li>
+                    <li class = "ppheadl subl">Played {{most_quizzes[2]}} Quizzes!</li>
+                </ul></li>
+            </ul>
+        </li>
+        <li>
+            <ul class = "topplayer">
+                <li class = "topplayer-headline"><div>Highest Score</div></li>
+                <li><ul>
+                    <li class = "ppheadl">{{best_avg[0]}}</li>
+                    <li class ="topPlayerPP"><img src = {{best_avg[1]}}/></li>
+                    <li class = "ppheadl subl">Has a {{best_avg[2]}}% Average Score!</li>
+                </ul></li>
+            </ul>
+        </li>
+            {% endblock %}
+        </ul>
+    </li>
+</ul>
+
+
+       
+    </body>
+<footer><div class = "page_nav" id = "page_nav"></div></footer>
+{% block javascript %}
+    <script>
+
+        logged_in = false;
+
+        number_of_pages = {{number_of_pages|tojson}};
+        current_page = {{current_page|tojson}};
+        category = {{category|tojson}};
+        sort_by = {{sort_by|tojson}};
+
+        page_nav_container = document.getElementById("page_nav");
+
+        if(number_of_pages > 10)
+        {
+            add_links("/1/"+category+"/"+sort_by, "1", 1==current_page);
+
+            if(current_page + 2 <= number_of_pages)
+            {
+                for(var i = 0; i < 3; i++)
+                {
+                    page= number_of_pages+i;
+                    add_links("/"+page+"/"+category+"/"+sort_by, current_page+i, current_page == page);
+                }
+                add_links("/"+number_of_pages+"/"+category+"/"+sort_by, number_of_pages, current_page==number_of_pages);
+            }
+            else
+            {
+                for(var i = 3; i > 0; i--)
+                {
+                    page= number_of_pages-i;
+                    add_links("/"+page+"/"+category+"/"+sort_by, page, page== current_page);
+                }
+            }
+ 
+        }
+        else
+            {
+                
+                for(var i = 1; i <= number_of_pages; i++)
+                {
+                    add_links("/"+i+"/"+category+"/"+sort_by,i, page_nav_container, i==current_page);
+                }
+            }
+
+
+
+        function add_links(links_to, link_text, container, text_color)
+        {
+                    lin_k = document.createElement("a");
+                    lin_k.className = "page_nav_link";
+                    if(text_color)
+                    {
+                        lin_k.style.color = "#e0d500";
+                    }
+                    lin_k.innerHTML = link_text;
+                    lin_k.href = links_to;
+                    container.appendChild(lin_k);
+        }
+
+        
+        function sort_by_category(category)
+        {
+            window.location.href = "/1/"+category+"/default";
+        }
+        //show user dashboard if logged in
+        document.onload(check_login_status());
+
+        function check_login_status()
+        {
+            // window.alert("checking login");
+            $.ajax({
+                url: "http://localhost:5000/verify_login_status",
+                type: "POST",
+                contentType: "application/JSON",
+                success:function(response){
+                
+                if(response.status)
+                {
+                    document.getElementById("user-options").style.display = "block";
+                    document.getElementById("login-button").style.display = "none";
+                    logged_in = true;
+                }
+                else
+                {
+                    document.getElementById("user-options").style.display = "none";
+                    document.getElementById("login-button").style.display = "block";
+                    logged_in = false;
+                }
+                }
+            });
+        }
+
+        function log_out()
+        {
+            //window.alert("logging out");
+
+            $.ajax({
+                url: "http://localhost:5000/log_out",
+                type: "POST",
+                contentType: "application/JSON",
+                data: null,
+                success:function(){window.location.reload();}
+            });
+
+        }
+  
+
+
+        function order_by(prompt)
+        {
+            window.location.href = "/"+current_page+"/"+category+"/"+prompt;
+        }
+
+        function access_profile()
+        {
+            // window.alert("accessing profile");
+            window.location.href = "/profile";
+        }
+
+
+        function blub(quiz_id)
+        {
+            if(!logged_in)
+            {
+                show_message("Please log in or register");
+                return
+            }
+            // window.alert("You clicked me!");
+            window.location.href = "/quiz/"+quiz_id+"/"+0;
+        }
+
+        function upvote(image)
+        {
+            if(!logged_in)
+            {
+                show_message("Please log in or register to upvote a quiz");
+                return;
+            }
+            conc = (image.id.split("_"));
+            quiz_id = conc[0];
+
+            if(image.className == "d1")
+            {
+                image.className = "d2";
+            }
+            else
+            {
+                image.className = "d1";
+            }
+
+            //make downvote grey
+            document.getElementById(quiz_id+"_downv").className = "d2"
+
+            
+            
+                $.ajax({
+                url: "http://localhost:5000/upvote",
+                type: "POST",
+                contentType: "application/JSON",
+                data: JSON.stringify({"quiz_id":quiz_id}),
+                success:function(response){vote_count = JSON.parse(response); document.getElementById(quiz_id+"_votes").innerHTML=vote_count.votes;}
+            });
+        }
+
+        function downvote(image)
+        {
+            if(!logged_in)
+            {
+                show_message("Please log in or register to downvote a quiz");
+                return;
+            }
+
+            conc = (image.id.split("_"));
+            quiz_id = conc[0];
+
+            if(image.className == "d1")
+            {
+                image.className = "d2";
+            }
+            else
+            {
+                image.className = "d1";
+            }
+
+            //make upvote grey
+            document.getElementById(quiz_id+"_upv").className = "d2"
+
+                $.ajax({
+                url: "http://localhost:5000/downvote",
+                type: "POST",
+                contentType: "application/JSON",
+                data: JSON.stringify({"quiz_id":quiz_id}),
+                success:function(response){vote_count = JSON.parse(response);document.getElementById(quiz_id+"_votes").innerHTML=vote_count.votes;}
+            });
+        }
+
+        function sign_up()
+        {
+            window.location.href = "/signup";
+        }
+
+        function go_to(a_link)
+            {
+                window.location.href = a_link;
+            }
+
+        function play_random_quiz()
+        {
+            if(!logged_in)
+            {
+                show_message("Please log in to play a random quiz");
+                return;
+            }
+            window.location.href = "/random_quiz"
+        }
+    </script>
+ {% endblock %}   
+</html>

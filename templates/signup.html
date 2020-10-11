@@ -1,0 +1,343 @@
+{% extends "base.html" %}
+<html>
+    <head>
+        <div class = "header"> 
+            <ul>
+                <li>
+                <img class = "logo" src = {{url_for('static', filename="images/logo2.png")}}/>
+                </li>
+                
+            </ul>
+            
+            
+        </div>
+        {% block head %}
+        <link rel = "stylesheet" href = {{url_for('static', filename="css/style_signup.css")}}/>
+        {% endblock %}
+    </head>
+    <body>
+  
+     <ul class = sort>
+        {% block sort %}
+        <div class = "home_button" onclick="go_to('/')">Home</div>
+        {%endblock%}
+        
+     </ul>
+  
+<ul class = "outter">
+    <li class = "left">
+        
+
+
+    </li>
+    <li class = "middle">
+        {% block middle %}
+        <ul class = "quizcontainer">
+           
+            <li class = "innerContainer">
+               
+                <div class = "form-container">
+                <form id = "sign-up-form">
+                    <div id = "alt-opt" onclick="show_fields()">Log in</div>
+                    <div>or</div>
+                    <div><span id = "curr-opt">Sign up</span> here:</div>
+                  
+                    <input type="text" id = "su_username" placeholder="Username" onclick="empty_error_username()" onblur="verify_username();"/>
+                    <div class = "em-su" id="error-username">username</div>
+                    <input id = "su_email" type="text" placeholder= "Email address" onclick="empty_error_email()" onblur="verify_email()"/>
+                    <div class = "em-su" id = "error-email">email</div>
+                    <input id = "su_password" type="password" placeholder="Password" onclick = "empty_error_password()"/>
+                    <input id = "su_password_conf" type="password" placeholder="Confirm password" onclick = "empty_error_password_conf()" onblur="verify_password()"/>
+                    <div class = "em-su" id = "error-password">password</div>
+                    <button type="button" onclick = "register_user()" id = "su_button">Sign up</button>
+                </form>
+                <form id = "log-in-form">
+                    <div id = "alt-opt" onclick="show_fields()">Sign up</div>
+                    <div>or</div>
+                    <div><span id = "curr-opt">Log in</span> here:</div>
+                  
+                    <input type="text" onblur="clear_border(this, 'gray')" id = "su_username log" placeholder="Username" />
+                    <input id = "su_password log" onblur="clear_border(this, 'gray')" type="password" placeholder="Password"/>
+                    <div class = "em-su" id = "error-password log">password</div>
+                    <button type="button" onclick = "log_in()" id = "su_button">Log in</button>
+                </form>
+             </div>
+             </li>
+            
+        </ul>
+        {% endblock %}
+    </li>
+
+    <li class = "right">
+        
+    </li>
+</ul>
+
+
+       
+    </body>
+        
+        {% block javascript %}
+        <script>
+         var login = true;
+         
+         var email_ver = false;
+         var username_ver = false;
+         var password_ver = false;
+
+        
+        function verify_email()
+         {
+
+            email = document.getElementById("su_email").value;
+           
+            {
+                $.ajax({
+                    url: "http://localhost:5000/verify_email",
+                    type: "POST",
+                    contentType: "application/JSON",
+                    data: JSON.stringify({"email":email.toUpperCase()}), 
+                    success: function(response){
+                       // window.alert("uuuu");
+                       chal = JSON.parse(response);
+                       // window.alert(chal);
+                       // window.alert(chal.duplicate + " email");
+                        
+                        if(chal.duplicate == true)
+                        {
+                            email_ver = false;
+                            document.getElementById("error-email").innerHTML = "This email address is already registered";
+                            document.getElementById("error-email").style.color = "red";
+                        }
+                        else
+                        {
+                            validateEmail(email);
+                        }
+                        
+                        }
+                });
+            
+            }
+            
+         }
+
+         function validateEmail(email) {
+            const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            valid_email =  re.test(String(email).toLowerCase());
+
+            //window.alert("email is " + valid_email);
+            clear_border(document.getElementById("su_email"), "gray");
+
+            if(!valid_email)
+            {
+                email_ver = false;
+                document.getElementById("error-email").innerHTML = "Please enter a valid email address";
+                document.getElementById("error-email").style.color = "red";
+            }
+            else
+            {
+                email_ver = true;
+            }
+           
+        }
+
+        function validate(some_value)
+        {
+            var abc_nums = /^[0-9a-zA-Z]+$/;
+            return some_value.match(abc_nums).length > 0;
+
+        }
+
+         function verify_username()
+         {
+             
+            username = document.getElementById("su_username").value;
+            // window.alert(validate(username));
+            clear_border(document.getElementById("su_username"), "gray");
+            if(username.length >= 4 && username.length <= 15&& validate(username) == true)
+            {
+                $.ajax({
+                    url: "http://localhost:5000/verify_username",
+                    type: "POST",
+                    contentType: "application/JSON",
+                    data: JSON.stringify({"username":username.toUpperCase()}), 
+                    success: function(response){
+                       // window.alert("uuuu");
+                       chal = JSON.parse(response);
+                       // window.alert(chal);
+                        //window.alert(chal.duplicate + " username");
+                        if(chal.duplicate)
+                        {
+                        username_ver = false;
+                        document.getElementById("error-username").innerHTML = "This username is already registered";
+                        document.getElementById("error-username").style.color = "red";
+                        }
+                        else
+                        {
+                            username_ver = true;
+                        }
+                        
+                        }
+                });
+            }
+            else
+            {
+                document.getElementById("error-username").innerHTML = "Username must be 4 - 15 characters long and contain only numbers and/or letters.";
+                document.getElementById("error-username").style.color = "red";
+            }
+
+            
+         }
+
+         function verify_password()
+         {
+             
+             password_ver = true;
+            //  window.alert(document.getElementById("su_password").value);
+            //  window.alert(document.getElementById("su_password_conf").value);
+             if(document.getElementById("su_password").value != document.getElementById("su_password_conf").value)
+             {
+                 password_ver = false;
+                 document.getElementById("error-password").innerHTML = "Passwords do not match";
+                 document.getElementById("error-password").style.color = "red";
+             }
+
+             clear_border(getElementById("su_password"), "gray");
+             clear_border(getElementById("su_password_conf"), "gray");
+         }
+
+         function empty_error_username()
+         {
+            document.getElementById("error-username").innerHTML = "abc";
+            document.getElementById("error-username").style.color = "#414142";
+         }
+
+         function empty_error_email()
+         {
+            document.getElementById("error-email").innerHTML = "abc";
+            document.getElementById("error-email").style.color = "#414142";
+         }
+
+         function empty_error_password()
+         {
+            document.getElementById("error-password").innerHTML = "abc";
+            document.getElementById("error-password").style.color = "#414142";
+            document.getElementById("su_password").value="";
+            document.getElementById("su_password_conf").value="";
+         }
+         function empty_error_password_conf()
+         {
+            document.getElementById("error-password").innerHTML = "abc";
+            document.getElementById("error-password").style.color = "#414142";
+            document.getElementById("su_password_conf").value="";
+         }
+
+         function empty()
+         {
+             empty_error_email();
+             empty_error_password();
+             empty_error_password_conf();
+             empty_error_username();
+             document.getElementById("su_email").value = "";
+             document.getElementById("su_username").value = ""
+         }
+
+         function show_fields()
+         {
+             empty();
+            if (login == true)
+            {
+                login = false;
+                document.getElementById("sign-up-form").style.display = "block";
+                document.getElementById("log-in-form").style.display = "none";
+            }
+            else
+            {
+                login = true;
+                document.getElementById("sign-up-form").style.display = "none";
+                document.getElementById("log-in-form").style.display = "block";
+            }
+            
+         }  
+
+        function log_in()
+        {
+            //window.alert("logging in");
+            username = document.getElementById("su_username log").value
+            //window.alert(username)
+            password = document.getElementById("su_password log").value
+           // window.alert(password)
+
+            clear_border( document.getElementById("su_username log"), "gray");
+            clear_border( document.getElementById("su_password log"), "gray");
+
+            empty();
+            $.ajax({
+                url: "http://localhost:5000/log_in",
+                type: "POST",
+                contentType: "application/JSON",
+                data: JSON.stringify({"username":username, "password":password}),
+                statusCode:{
+                    500: function(){show_message("Username or password is wrong", null);},
+                    200: function() {
+                    show_message_and_redirect_on_ok("Successfully logged in", "/profile");}
+                    }
+            });
+        }  
+         
+        function register_user()
+        {
+           
+
+            username = document.getElementById("su_username").value
+            email = document.getElementById("su_email").value
+            password = document.getElementById("su_password").value
+
+            clear_border(document.getElementById("su_username"), "gray");
+            clear_border(document.getElementById("su_email"), "gray");
+            clear_border(document.getElementById("su_password"), "gray");
+            clear_border(document.getElementById("su_password_conf"), "gray");
+
+            // window.alert(password_ver);
+            // window.alert(username_ver);
+            // window.alert(email_ver);
+
+            if(password_ver&&username_ver&&email_ver)
+            {
+            empty();
+            $.ajax({
+                url: "http://localhost:5000/register_user",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({"username": username, "password":password, "email":email}), 
+                statusCode:{
+                    500: function(){show_message("User already exists. Please try logging in"); show_fields();},
+                    200: function() {
+                        show_message_and_redirect_on_ok("Successfully registered", "/picture");
+                        }
+                    }
+            });
+        }
+            show_message("Please enter a username, valid email address and matching passwords to register", null);
+        }
+
+        function go_to(a_link)
+            {
+                window.location.href = a_link;
+            }
+
+        function clear_border(item, a_color)
+        {
+            color = "red";
+            if(item.value != "")
+            {
+                color= a_color;
+            }
+            item.style.borderColor = color;
+            
+        }
+    
+        </script>
+        {% endblock %}
+
+</html>

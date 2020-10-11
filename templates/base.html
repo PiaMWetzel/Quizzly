@@ -1,0 +1,76 @@
+<html>
+    <head>
+
+        <div class = "header"> 
+            <ul>
+                <li>
+                <img class = "logo" src ={{url_for('static', filename='images/logo2.png')}}/>
+                </li>
+                
+            </ul>
+            
+            
+        </div>
+        {% block head %}{% endblock %}
+        <!-- <link rel = "stylesheet" href = {{url_for('static', filename='css/style.css')}}/> -->
+        <link rel = "stylesheet" href = {{url_for('static', filename='css/style_dashboard.css')}}/>
+        <link rel = "stylesheet" href = {{url_for('static', filename='css/style-custom-message.css')}}/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src = {{url_for('static', filename="js/dashboard.js")}}></script>
+        <script src = {{url_for('static', filename="js/custom_message.js")}}></script>
+        <script src = {{url_for('static', filename="js/common.js")}}></script>
+    </head>
+    <body>
+
+
+        <div class = "custom-message" id = "custom-message">
+            <div class="message-headline" id = "message-headline"></div>
+            <div class="message-center" id = "message-center">You have been successfully logged out</div>
+            
+        <div class="message-footer"><button id = "cust_mess_button" onclick="hide_message(this.parentNode.parentNode, null)">Ok</button></div>
+        </div>
+        
+        
+     <ul class = sort>
+        {% block sort %}
+        {% endblock %}
+     </ul>
+  
+<ul class = "outter">
+    <li class = "left">
+        {% block left %}{% endblock %}
+
+
+    </li>
+    <li class = "middle">
+        {% block middle %}{% endblock %}
+    </li>
+
+    <li class = "right">
+        <ul>
+            <li>
+                <ul class = "user-options" id = "user-options">
+                    
+                <li class = "upper-frame">Dashboard</li>
+                <li class = "user-option" onclick="access_profile()"> <div class = "user_profile" ><img src ={{url_for('static', filename="images/nerd.png")}}/></div>Profile</li>
+                <li  class = "user-option" onclick="new_quiz()"><div class = "new_quiz"><img src ={{url_for('static', filename="images/quiz.png")}}/></div>Create Quiz</li>
+                <li  class = "user-option exit" onclick="log_out()"> <div class = "user_profile"><img src ={{url_for('static', filename="images/exit.png")}}/>Sign out</div></li>
+                <li class = "lower-frame"></li>
+                </ul>
+            </li>
+            <li>
+                <ul>{% block right %} {% endblock %}</ul>
+                
+            </li>
+        </ul>
+    </li>
+</ul>
+
+
+       
+    </body>
+<footer><div class = "page_nav" id = "page_nav"></div></footer>
+{% block javascript %}
+    <script> </script>
+{%endblock%}
+</html>
